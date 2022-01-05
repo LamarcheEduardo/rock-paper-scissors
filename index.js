@@ -1,10 +1,10 @@
 //computerPlay function
 
-function computerPlay() {
+const computerPlay = () => {
     const choices = ["rock", "paper", "scissors"];
     let result = Math.floor(Math.random()*3);
     return choices[result];
-}
+};
 //declare score values
 
 let playerScore = 0;
@@ -21,7 +21,8 @@ function playRound() {
     let cs = computerSelection.toLowerCase();
 
         if (ps === cs) {
-            return "Tie";
+            console.log("Tie");
+                return rounds++;
         } else if (ps === "rock") {
             if (cs === "paper") {
                 console.log("You lost. Paper beats Rock");
@@ -50,21 +51,24 @@ function playRound() {
 }
 
 
-//Game function needs to have som source of counter to limit when it reaches 5 games. Can I use a For loop?
+//Game function needs to have som source of counter to limit when it reaches best of 5 games. Can I use a For loop?
 //Syntax:
 //for (let i = 0; i > rounds; i++) {
     //i++;
 //}
 
-function game() {
+const checkScore = () => {
+    if (playerScore === 5) {
+        alert("You've won the game!");
+    } else if (computerScore === 5) {
+       alert("You've lost the game");
+    }
+}
+
+const game = () => {
 
     for (let i = 1; i <= 6; i++) {
         playRound();
+        checkScore();
     }
-
-    if (playerScore > computerScore) {
-        return "You've Won!";
-    } else {
-        return "You've lost!";
-    }
-}
+};
