@@ -1,13 +1,5 @@
-
-const computerPlay = () => {
-    const choices = ["rock", "paper", "scissors"];
-    let result = Math.floor(Math.random()*3);
-    return choices[result];
-};
-
 //Create Buttons
-
-const container = document.querySelector('#container');
+const container = document.querySelector('#container'); 
 
 const title = document.createElement('div');
 title.classList.add('welcomeMsg');
@@ -22,106 +14,105 @@ options.style.cssText = 'padding: 16px';
 
 const rock = document.createElement('button');
 rock.classList.add('rock');
-rock.setAttribute('id','buttons');
+rock.setAttribute('id','rock');
 rock.innerText = "Rock";
 options.appendChild(rock);
 rock.style.cssText = 'margin: 4px';
 
 const paper = document.createElement('button');
 paper.classList.add('paper');
-paper.setAttribute('id','buttons');
+paper.setAttribute('id','paper');
 paper.innerText = "Paper";
 options.appendChild(paper);
 paper.style.cssText = 'margin: 4px';
 
 const scissors = document.createElement('button');
 scissors.classList.add('scissors');
-scissors.setAttribute('id','buttons');
+scissors.setAttribute('id','scissors');
 scissors.innerText = "Scissors";
 options.appendChild(scissors);
 scissors.style.cssText = 'margin: 4px';
 
-const buttons = document.querySelectorAll('button');
-let playerSelect = Array.from(buttons).forEach((button) => {
-            button.addEventListener('click', () => {
-                playerChoice.innerText = "You've selected: " + button.innerText.toLowerCase();
-                computerChoice.innerText = "Computer selected: " + computerPlay();
-            });
-        });
-
 const playerChoice = document.createElement('div');
 playerChoice.classList.add('playerChoice');
-playerChoice.innerText = "";
-container.appendChild(playerChoice);
+container.appendChild(playerChoice); //display the player choice result
+
+
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => { 
+        const result = button.textContent.toLowerCase();
+        playerChoice.innerText = `You've picked: ${result}`;
+        const computerResult = computerPlay();
+        computerChoice.innerText = `Machine picked: ${computerResult}`;
+       game(result, computerResult);
+    });
+});
 
 const computerChoice = document.createElement('div');
 computerChoice.classList.add('computerChoice');
-container.appendChild(computerChoice);
+container.appendChild(computerChoice); //display the computerPlay function result
 
+const roundPicks = document.createElement('div');
+roundPicks.classList.add('roundPicks');
+container.appendChild(roundPicks);
 
-//declare score values
-
+//declare score values and rounds (old html)
 let playerScore = 0;
 let computerScore = 0;
 let rounds = 0;
 
-//playRound() function
-
-let playRound = () => {
-
-    // let playerSelection = prompt("Pick one: Rock, Paper or Scissors");
-    let computerSelection = computerPlay();
-    let ps = playerSelection.toLowerCase();
-    let cs = computerSelection.toLowerCase();
-
-        if (ps === cs) {
-            console.log("Tie");
-                return rounds++;
-        } else if (ps === "rock") {
-            if (cs === "paper") {
-                console.log("You lost. Paper beats Rock");
-                return computerScore++, rounds++;
-            } else if (cs === "scissors") {
-                console.log("You Won. Rock wins over Scissors");
-                return playerScore++, rounds++;
-            }
-        } else if (ps === "paper") {
-            if (cs === "rock") {
-                console.log("You Win. Paper wins over Rock");
-                return playerScore++, rounds++;
-            } else if (cs === "scissors") {
-                console.log("You Lost, Scissors wins over Paper");
-                return computerScore++, rounds++;
-            }
-        } else if (ps === "scissors") {
-            if (cs === "rock") {
-                console.log("You Lost. Rock Wins over Scissors");
-                return computerScore++, rounds++; 
-            } else if (cs === "paper") {
-                console.log("You Won! Scissors wins over Paper");
-                return playerScore++, rounds++;
-            }
-        }
+//random computer selection
+const computerPlay = () => {
+    const choices = ["rock", "paper", "scissors"];
+    let result = Math.floor(Math.random()*3);
+    return choices[result];
 };
 
-//Game function needs to have som source of counter to limit when it reaches best of 5 games. Can I use a For loop?
-//Syntax:
-//for (let i = 0; i > rounds; i++) {
-    //i++;
-//}
+//Play a whole game.
+const game = (event, computerResult) => {
+        playRound(event, computerResult);
+        checkScore();
+};
 
-// const checkScore = () => {
-//     if (playerScore === 5) {
-//         alert("You've won the game!");
-//     } else if (computerScore === 5) {
-//        alert("You've lost the game");
-//     }
-// }
+//checking the score if someone wins.
 
-// const game = () => {
+const checkScore = () => {
+    if (playerScore === 5) {
+        alert("You've won the game!");
+    } else if (computerScore === 5) {
+        alert("You've lost the game");
+    }
+};
 
-//     for (let i = 1; i <= 6; i++) {
-//         playRound();
-//         checkScore();
-//     }
-// };
+//playRound function
+ 
+let playRound = (event, computerResult) => {
+
+    let ps = event.toLowerCase();
+    let cs = computerResult.toLowerCase();
+
+        if (ps === "rock" && cs === "rock") {
+            return roundPicks.innerText = "It's a draw!", rounds++;
+        } else if (ps === "rock" && cs === "paper") {
+            return roundPicks.innerText = "You've lost. Paper Wins Rock", computerScore++, rounds++;
+        } else if (ps === "rock" && cs === "scissors") {
+            return roundPicks.innerText = "You win. Rock wins over Scissors", playerScore++, rounds++;
+        } else if (ps === "paper" && cs === "paper") {
+            return roundPicks.innerText = "It's a draw!", rounds++;
+        } else if (ps === "paper" && cs === "rock") {
+            return roundPicks.innerText = "You win! Paper Beats Rock", playerScore++, rounds++;
+        } else if (ps === "paper" && cs === "scissors") {
+            return roundPicks.innerText = "You've lost. Scissors wins over Paper", computerScore++, rounds++;
+        } else if (ps === "scissors" && cs === "scissors") {
+            return roundPicks.innerText = "It's a draw!", rounds++;
+        } else if (ps === "scissors" && cs === "paper") {
+            return roundPicks.innerText = "You win. Scissors Wins over Paper", playerScore++, rounds++;
+        } else if (ps === "scissors" && cs === "rock") {
+            return roundPicks.innerText = "You've lost. Rock wins over Scissors", computerScore++, rounds++;
+        }
+
+};
+
+
